@@ -5,23 +5,23 @@ const mongoose = require('mongoose')
 const bootcampsSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Please provide a name to the bootcamo'],
+        required: [true, "Please privide a name"],
         unique: true,
     },
     rating: {
         type: Number,
-        required: [true.valueOf, 'please provide a rating for bootcamp'],
+        required: [true, "Please provide a rating"],
     },
     description: {
         type: String,
-        required: [true, 'please provide description for bootcamp'],
+        required: [true, "Please provide a description"],
     },
     price: {
         type: Number,
-        required: [true, 'please provide price for bootcamp']
-    }
+        required: [true, "Please provide a price"],
+    },
 })
 
 // Model
-const bootcamp = mongoose.model('Bootcamp', bootcampsSchema)
+const bootcamp = mongoose.model("Bootcamp", bootcampsSchema)
 module.exports = bootcamp

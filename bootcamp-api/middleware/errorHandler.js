@@ -20,7 +20,7 @@ const errorHandler = (err,req,res,next) => {
     }
 
     // Model validation fail
-    if(err.name === "ValidationError"){
+    if(err && err.name === "ValidationError"){
         const message = Object.values(err.errors).map(error => error.message).join(", ")
         error = new ErrorResponse(message, 400)
     }
