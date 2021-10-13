@@ -4,17 +4,41 @@ const asyncHandler = require("../middleware/asyncHandler");
 const ErrorResponse = require("../utils/errorResponse");
 
 exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
-  // console.log(req.query)
+  
 
   let query;
 
   const reqQuery = { ...req.query };
 
-  const bootcamp = await Bootcamp.find({ price: { $lte: 300 } });
+  const removableFields = ["sort"];
+
+  removableFields.forEach((val) => delete reqQuery[val]);
+
+  let queryStr = JSON.stringify(reqQuery);
+
+  //dodajemo $ ispred operatora jer req.query dobijmo kao objekat bez $
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+  query = Bootcamp.find(JSON.parse(queryStr)).sort()
+
+  if(req.query.sort) {
+      const sortByArr = req.query.sort.split(', ')
+      const sortByStr = sortByArr.join(' ')
+
+      query = query.sort(sortByStr)
+  }else {
+      // ako nema sorta sortirati po ceni od najmanje
+      query = query.sort('price')
+  }
+  
+
+  const bootcamps = await query
 
   res.status(200).json({
     success: true,
-    data: bootcamp, 
+    data: bootcamps,
   });
 });
 
